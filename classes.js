@@ -7,25 +7,16 @@ window.onload = function () {
         return health > 0;
     }
 
-    function getHealth (arr) {
+    function getSumOfFeature (arr, feature) {
         let result = 0;
 
-        arr.forEach(function (item) {
-            result += item.health;
+        arr.forEach(function (item, i) {
+            result += item[feature];
         });
 
         return result;
     }
-
-    function getPower (arr) {
-        let result = 0;
-
-        arr.forEach(function (item) {
-            result += item.power;
-        });
-
-        return result;
-    }
+    
 /* ----------Класс Battle----------- */
     class Battle {
 
@@ -62,14 +53,14 @@ window.onload = function () {
     class Kingdom {
         constructor(health, power) {
             let warriors = [new Warrior('Gnome-Grisha'),
-                             new Warrior('Ork-Tisha'),
-                             new Warrior('Elf-Misha')];
-            this.health = health || getHealth(warriors);
-            this.power = power || getPower(warriors);
+                            new Warrior('Ork-Tisha'),
+                            new Warrior('Elf-Misha')];
+            this.health = health || getSumOfFeature(warriors, 'health');
+            this.power = power || getSumOfFeature(warriors, 'power');
         }
 
         attack() {
-
+            //console.log("Power of kingdom %i", this.power);
         }
 
         defend(power) {
@@ -98,7 +89,7 @@ window.onload = function () {
         }
 
         attack() {
-
+            //console.log("Power of enemy %i", this.power);
         }
 
         defend(power) {
