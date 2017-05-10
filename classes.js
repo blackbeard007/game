@@ -28,14 +28,11 @@ window.onload = function () {
 
             if (randomStart > 0.5) {
                     kingdom.attack();
-                    enemy.defend(kingdom.power);
             } 
 
             while (isAlive(getSumOfFeature(kingdom.warriors, 'health')) && isAlive(enemy.health)) {
-                    enemy.attack();
-                    kingdom.defend(enemy.power);       
-                    kingdom.attack();
-                    enemy.defend(kingdom.power);             
+                    enemy.attack();       
+                    kingdom.attack();          
             } 
 
             if (!isAlive(getSumOfFeature(kingdom.warriors, 'health'))) {
@@ -59,6 +56,7 @@ window.onload = function () {
 
         attack() {
             //console.log("Power of kingdom %i", this.power);
+            enemy.defend(kingdom.power);  
         }
 
         defend(power) {
@@ -76,7 +74,7 @@ window.onload = function () {
         constructor(name, health, power) {
             this.name = name;
             this.health = health || 100;
-            this.power = power || Math.round(Math.random() * 15);
+            this.power = power || Math.round(Math.random() * 20);
         }
     }
 /* ----------------------------------- */
@@ -90,6 +88,7 @@ window.onload = function () {
 
         attack() {
             //console.log("Power of enemy %i", this.power);
+            kingdom.defend(enemy.power);  
         }
 
         defend(power) {
