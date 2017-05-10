@@ -10,7 +10,7 @@ window.onload = function () {
     function getSumOfFeature (arr, feature) {
         let result = 0;
 
-        arr.forEach(function (item, i) {
+        arr.forEach(function (item) {
             result += item[feature];
         });
 
@@ -21,42 +21,40 @@ window.onload = function () {
     class Battle {
 
         fight() {
+            let randomStart = Math.random();
+
             console.log("Power of kingdom %i", kingdom.power);
             console.log("Power of enemy %i", enemy.power);
-            while (1) {
 
-                if (isAlive(kingdom.health)) {
+            if (randomStart > 0.5) {
                     kingdom.attack();
                     enemy.defend(kingdom.power);
-                } else {
-                    console.log('!!!!Enemy won!!!!');
-                    break;
-                }
+            } 
 
-                if (isAlive(enemy.health)) {
+            while (isAlive(getSumOfFeature(kingdom.warriors, 'health')) && isAlive(enemy.health)) {
                     enemy.attack();
-                    kingdom.defend(enemy.power);
-                } else {
-                    console.log('!!!!Kingdom won!!!!');
-                    break;
-                }
+                    kingdom.defend(enemy.power);       
+                    kingdom.attack();
+                    enemy.defend(kingdom.power);             
+            } 
 
-            }
-                         
+            if (!isAlive(getSumOfFeature(kingdom.warriors, 'health'))) {
+                console.log('!!!!Enemy won!!!!');
+            } else {
+                console.log('!!!!Kingdom won!!!!');
+            }        
         }
-
     }
 
 /* ----------------------------------- */
 
 /*--------- Класс Kingdom------------- */
     class Kingdom {
-        constructor(health, power) {
-            let warriors = [new Warrior('Gnome-Grisha'),
-                            new Warrior('Ork-Tisha'),
-                            new Warrior('Elf-Misha')];
-            this.health = health || getSumOfFeature(warriors, 'health');
-            this.power = power || getSumOfFeature(warriors, 'power');
+        constructor() {
+            this.warriors = [new Warrior('Gnome-Grisha'),
+                             new Warrior('Ork-Tisha'),
+                             new Warrior('Elf-Misha')];
+            this.power = getSumOfFeature(this.warriors, 'power');
         }
 
         attack() {
@@ -64,8 +62,10 @@ window.onload = function () {
         }
 
         defend(power) {
-            this.health -= power;
-            console.log("health of kingdom is %i", this.health);
+            this.warriors.forEach(function (item) {
+                item.health -= power;
+            });
+            console.log("health of warriors is %i", getSumOfFeature(this.warriors, 'health'));
         }
 
     }
@@ -84,8 +84,8 @@ window.onload = function () {
 /* ----------Класс Enemy------------- */
     class Enemy {
         constructor(health, power) {
-            this.health = health || kingdom.health;
-            this.power = power || Math.round(Math.random() * 35);
+            this.health = health;
+            this.power = power || Math.round(Math.random() * 30);
         }
 
         attack() {
@@ -100,10 +100,12 @@ window.onload = function () {
     }
 /* ----------------------------------- */
 
-    var kingdom = new Kingdom(),
+    let kingdom = new Kingdom(),
         battle = new Battle(),
-        enemy = new Enemy();
+        enemy = new Enemy(200);
 
     btnStartGame.addEventListener('click', battle.fight);
-
+    btnStartGame.addEventListener('click', function () { 
+        btnStartGame.innerHTML = 'F5 to start again';
+    });
 };
