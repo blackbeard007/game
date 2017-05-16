@@ -1,16 +1,27 @@
+'use strict';
+
 class Enemy {
     constructor(health, power) {
-        this.health = health;
-        this.power = power || Math.round(Math.random() * 30);
+        this._health = health;
+        this._power = power || Math.round(Math.random() * 30);
     }
 
-    attack() {
-        //console.log("Power of enemy %i", this.power);
-        kingdom.defend(enemy.power);  
-    }
+    attack() {}
 
     defend(power) {
-        this.health -= power;
-        console.log("health of enemy is %i", this.health);
+        this._health -= power;
+        console.log("health of enemy is %i", this._health);
+    }
+
+    isAlive() {
+        return this._health > 0;
+    }
+
+    get power() {
+        return this._power;
+    }
+
+    get health() {
+        return this._health;
     }
 }

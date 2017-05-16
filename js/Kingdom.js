@@ -1,20 +1,47 @@
+'use strict';
+
 class Kingdom {
     constructor() {
-        this.warriors = [new Warrior('Gnome-Grisha'),
-                         new Warrior('Ork-Tisha'),
-                         new Warrior('Elf-Misha')];
-        this.power = getSumOfFeature(this.warriors, 'power');
+        this._warriorList = 
+            [
+             new Warrior('Gnome-Grisha'),
+             new Warrior('Ork-Tisha'),
+             new Warrior('Elf-Misha')
+            ];
+        this._power = this.sumOfFeature('power');
     }
 
-    attack() {
-        //console.log("Power of kingdom %i", this.power);
-        enemy.defend(kingdom.power);  
-    }
+    attack() {}
 
     defend(power) {
-        this.warriors.forEach(function (item) {
-        item.health -= power;
+        this._warriorList.forEach(function (warrior) {
+            let newHealth = warrior.health - power;
+            warrior.health = newHealth;
         });
-        console.log("health of warriors is %i", getSumOfFeature(this.warriors, 'health'));
+        console.log("health of warriors is %i", this.sumOfFeature('health'));
+    }
+
+    sumOfFeature(feature) {
+        let result = 0;
+
+        this._warriorList.forEach(function (warrior) {
+            result += warrior[feature];
+        });
+
+        return result;
+    }
+
+    isAlive() {
+        let result = 0;
+
+        this._warriorList.forEach(function (warrior) {
+            result += warrior.health;
+        });
+
+        return result > 0;
+    }
+
+    get power() {
+        return this._power;
     }
 }

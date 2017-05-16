@@ -1,7 +1,22 @@
+'use strict';
+
 class Warrior {
     constructor(name, health, power) {
-        this.name = name;
-        this.health = health || 100;
-        this.power = power || Math.round(Math.random() * 20);
+        this._name = name;
+        this._health = health || 100;
+        this._power = power || Math.round(Math.random() * 20);
     }
+
+    get health() {
+        return this._health;
+    }
+
+    set health(newHealth) {
+        this._health = newHealth;
+    }
+
+    get power() {
+        return this._power;
+    }
+
 }

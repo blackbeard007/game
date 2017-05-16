@@ -2,8 +2,6 @@
 'use strict';
 
 let btn = document.getElementById('btnStartGame'),
-    kingdom = new Kingdom(),
-    battle = new Battle(),
-    enemy = new Enemy(200);
+    battle = new Battle();
 
 btn.addEventListener('click', battle.fight);
