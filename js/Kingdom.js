@@ -18,7 +18,6 @@ class Kingdom {
             let newHealth = warrior.health - power;
             warrior.health = newHealth;
         });
-        console.log("health of warriors is %i", this.sumOfFeature('health'));
     }
 
     sumOfFeature(feature) {

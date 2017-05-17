@@ -10,7 +10,6 @@ class Enemy {
 
     defend(power) {
         this._health -= power;
-        console.log("health of enemy is %i", this._health);
     }
 
     isAlive() {

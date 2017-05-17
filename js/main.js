@@ -5,3 +5,4 @@ let btn = document.getElementById('btnStartGame'),
     battle = new Battle();
 
 btn.addEventListener('click', battle.fight);
+
