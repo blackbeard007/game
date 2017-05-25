@@ -45,7 +45,7 @@ class Battle {
 
             function createKingdomDiv () {
                 let div = document.createElement('div'),
-                    tmpl = _.template('Health of warriors: <%= health %>');
+                    tmpl = _.template('Enemy\'s attack!!! Health of warriors: <%= health %>');
 
                 div.classList.add('kingdomSide');
                 div.innerHTML = tmpl(
@@ -58,7 +58,7 @@ class Battle {
 
             function createEnemyDiv () {
                 let div = document.createElement('div'),
-                    tmpl = _.template('Health of enemy: <%= health %>');
+                    tmpl = _.template('Warriors\' attack!!! Health of enemy: <%= health %>');
 
                 div.classList.add('enemySide');
                 div.innerHTML = tmpl(
