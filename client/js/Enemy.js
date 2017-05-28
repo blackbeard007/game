@@ -1,9 +1,10 @@
 'use strict';
 
 class Enemy {
-    constructor(health, power) {
-        this._health = health;
-        this._power = power || Math.round(Math.random() * 30);
+    constructor(data) {
+        this._name = data.name;
+        this._health = data.health;
+        this._power = data.power;
     }
 
     attack() {}

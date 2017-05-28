@@ -3,70 +3,46 @@
 class Battle {
     fight() {
         let view = (function () {
-            function showResults () {
-                let divOfWinner = document.createElement('div');
-                
-                divOfWinner.classList.add('winner');
+            let game = document.getElementById('game');
 
+            function showResults () {
                 if (!kingdom.isAlive()) {
-                    divOfWinner.classList.add('enemyWinner');
-                    divOfWinner.innerHTML = 'Enemy killed your warriors';
-                    game.appendChild(divOfWinner);
+                    $('<div>Enemy killed your warriors</div>').addClass('winner enemyWinner').appendTo(game);
                 } else {
-                    divOfWinner.classList.add('kingdomWinner');
-                    divOfWinner.innerHTML = 'Warriors killed enemy';
-                    game.appendChild(divOfWinner);
+                    $('<div>Warriors killed enemy</div>').addClass('winner kingdomWinner').appendTo(game);
                 } 
             }
 
             function generateFeatures () {
-                let powerOfEnemy = document.createElement('div'),
-                    powerOfKingdom = document.createElement('div'),
-                    healthOfEnemy = document.createElement('div'),
-                    healthOfKingdom = document.createElement('div');
+                let $kingdomPower = $('<div>Power of warriors '+ kingdom.power + '</div>').addClass('power'),
+                    $kingdomHealth = $('<div>Health of warriors '+ kingdom.sumOfFeature('health') + '</div>').addClass('health'),
+                    $enemyPower = $('<div>Power of enemy '+ enemy.power + '</div>').addClass('power'),
+                    $enemyHealth = $('<div>Health of enemy  '+ enemy.health + '</div>').addClass('health');
 
-                powerOfEnemy.classList.add('power');
-                powerOfKingdom.classList.add('power');
-                healthOfEnemy.classList.add('health');
-                healthOfKingdom.classList.add('health');
+                $(game).text('');
 
-                powerOfEnemy.innerHTML = 'Power of enemy ' + enemy.power;
-                powerOfKingdom.innerHTML = 'Power of warriors ' + kingdom.power;
-                healthOfEnemy.innerHTML = 'Health of enemy ' + enemy.health;
-                healthOfKingdom.innerHTML = 'Health of warriors ' + kingdom.sumOfFeature('health');
-
-                game.innerHTML = '';
-
-                game.appendChild(powerOfKingdom);
-                game.appendChild(healthOfKingdom)
-                game.appendChild(powerOfEnemy);
-                game.appendChild(healthOfEnemy);
+                $kingdomPower.appendTo(game);
+                $kingdomHealth.appendTo(game);
+                $enemyPower.appendTo(game);
+                $enemyHealth.appendTo(game);
             }
 
             function createKingdomDiv () {
-                let div = document.createElement('div'),
-                    tmpl = _.template('Enemy\'s attack!!! Health of warriors: <%= health %>');
+                let tmpl = _.template('Enemy\'s attack!!! Health of warriors: <%= health %>');
 
-                div.classList.add('kingdomSide');
-                div.innerHTML = tmpl(
-                    {
-                        health: kingdom.sumOfFeature('health')
-                    }
-                );
-                game.appendChild(div);
+                $('<div>', {
+                    'class': 'kingdomSide',
+                    'text': tmpl({ health: kingdom.sumOfFeature('health') }),
+                }).appendTo(game);
             }
 
             function createEnemyDiv () {
-                let div = document.createElement('div'),
-                    tmpl = _.template('Warriors\' attack!!! Health of enemy: <%= health %>');
+                let tmpl = _.template('Warriors\' attack!!! Health of enemy: <%= health %>');
 
-                div.classList.add('enemySide');
-                div.innerHTML = tmpl(
-                    {
-                        health: enemy.health
-                    }
-                );
-                game.appendChild(div);
+                $('<div>', {
+                    'class': 'enemySide',
+                    'text': tmpl({ health: enemy.health }),
+                }).appendTo(game);
             }
 
             return {
@@ -76,14 +52,12 @@ class Battle {
                 createEnemyDiv: createEnemyDiv
             }
         })(),
-            randomStart = Math.random(),
             kingdom = new Kingdom(),
-            enemy = new Enemy(200),
-            game = document.getElementById('game');
+            enemy = new Enemy(refreshEnemy());
             
         view.generateFeatures();
 
-        if (randomStart > 0.5) {
+        if (Math.random() > 0.5) {
             kingdom.attack();
             enemy.defend(kingdom.power);
             view.createEnemyDiv();
@@ -103,6 +77,19 @@ class Battle {
             view.createEnemyDiv();
         } 
 
-        view.showResults();      
+        view.showResults();
+             
+        function refreshEnemy () {
+            let xhr = new XMLHttpRequest(),
+                newEnemy;
+
+            xhr.open('GET', 'get-enemy', false);
+            xhr.send();
+
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                newEnemy = JSON.parse(xhr.responseText);
+                return newEnemy;
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ class Warrior {
     constructor(name, health, power) {
         this._name = name;
         this._health = health || 100;
-        this._power = power || Math.round(Math.random() * 20);
+        this._power = power || Math.round(Math.random() * 50);
     }
 
     get health() {
@@ -19,4 +19,7 @@ class Warrior {
         return this._power;
     }
 
+    set power(newPower) {
+        this._power = newPower;
+    }
 }

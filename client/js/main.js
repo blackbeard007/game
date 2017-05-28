@@ -3,31 +3,28 @@
 
 window.onload = function () {
     let server = (function () {
+        let info = document.getElementById('info')
         /*get names from server and show it on a page*/
         function getNames () {
-            let btnNames = document.createElement('button'),
-                div = document.createElement('div'),
-                span = document.createElement('span'),
+            let $div = $('<div>').addClass('info').appendTo(info),
+                $span = $('<span>').text(''),
                 output = [];
 
-            btnNames.classList.add('btnInfo');
-            btnNames.innerHTML = 'NAMES';
-            div.classList.add('info');
-
-            info.appendChild(div);
-            div.appendChild(btnNames);
-
-            btnNames.addEventListener('click', function () {
+            $('<button>', {
+                'class': 'btnInfo',
+                'text': 'NAMES'
+            }).appendTo($div).on('click', function() {
                 let xhr = new XMLHttpRequest(),
                     names = '';
 
                 xhr.open('GET', 'get-names');
+                xhr.send();
+
                 xhr.addEventListener('readystatechange', function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         showNames();
                     }
                 });
-                xhr.send();
 
                 function showNames () {
                     xhr = xhr.responseText.split('');
@@ -48,30 +45,24 @@ window.onload = function () {
                         output.push(names[i]);
                     }
 
-                    span.innerHTML = output;
-                    div.appendChild(span);
+                    $span.text(output).appendTo($div);
                 }
             });
         }
 
         /*get time from server and show it on a page*/
         function getTime () {
-            let div = document.createElement('div'),
-                btnTime = document.createElement('button'),
-                time = document.createElement('span');
+            let $time = $('<span>').text(''),
+                $div = $('<div>').addClass('info').appendTo(info),
+                $btnTime = $('<button>').addClass('btnInfo').text('TIME').appendTo($div);
 
-            btnTime.classList.add('btnInfo');
-            btnTime.innerHTML = 'TIME';
-            div.classList.add('info');
-
-            info.appendChild(div);
-            div.appendChild(btnTime);
-
-            btnTime.addEventListener('click', function () {
+            $btnTime.on('click', function () {
                 let xhr = new XMLHttpRequest(),
                     out = '';
                   
                 xhr.open('GET', 'get-time');
+                xhr.send();
+
                 xhr.addEventListener('readystatechange', function() {
                     if (xhr.readyState === 4 && xhr.status === 200) {
                         xhr = xhr.responseText.split('');
@@ -79,11 +70,10 @@ window.onload = function () {
                         for (let i = 15; i < xhr.length - 1; i++) {
                             out += xhr[i];
                         }
-                        time.innerHTML = out;
-                        div.appendChild(time);
+
+                        $time.text(out).appendTo($div);                 
                     }
                 });
-                xhr.send();
             });
         }
 
@@ -92,16 +82,17 @@ window.onload = function () {
             getTime: getTime   
         }
         })(),
-        btn = document.getElementById('btnStartGame'),
-        info = document.getElementById('info');
+        btn = document.getElementById('btnStartGame');
 
     server.getTime();
     server.getNames();
 
-    btn.addEventListener('click', startGame);  
+    $(btn).on('click', startGame);  
 
     function startGame () {
-        let battle = new Battle();
-        battle.fight();
+        setInterval(function() {
+            let battle = new Battle();
+            battle.fight();
+        }, 3000);
     }
 }
